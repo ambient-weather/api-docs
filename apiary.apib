@@ -1,13 +1,13 @@
 FORMAT: 1A
 HOST: https://api.ambientweather.net/
 
-# Ambient Weather API
+# Ambient Weather REST API
 
 Access an Ambient Weather user's weather station data programmatically using our REST API
 
 ##### Authentication
 
-Two API Keys are required for all API requests: 
+Two API Keys are required for all REST API requests: 
 
 + `applicationKey` - identifies the developer / application. To request an application key please email `support@ambientweather.com`
 + `apiKey` - grants access to past/present data for a given user's devices.  A typical consumer-facing application will initially ask the user to create an `apiKey` on thier AmbientWeather.net account page (https://dashboard.ambientweather.net/account) and paste it into the app.  Developers for personal or in-house apps will also need to create an apiKey on their own account page.
@@ -117,3 +117,145 @@ Fetch data for a given device. Data is stored in 5 minute increments.
                 "dewPoint": 34.45380707462477
             }
         ]
+        
+# Group Ambient Realtime API
+
+Access an Ambient Weather user's weather station data in realtime using our Realtime API
+
+
+##### Authentication
+
+You will be working with two types of keys when using the Realtime API: 
+
++ `applicationKey` - identifies the developer / application. To request an application key please email `support@ambientweather.com`. This key is passed to the server when you make the initial connection
++ `apiKey` - identifies a user. This key grants read-only access to all of the devices for a given user. It is used in the `subscribe` command (see below)
+
+##### Websockets
+
+The realtime API uses Websockets and is based on Socket.io (https://socket.io/). The easiest way to use the API is to use a Socket.io helper library. They are available in most languages.
+
+ENDPOINT: `https://api.ambientweather.net/?api=1&applicationKey=....`
+
+The key parameters are `api=1` to identify the api version and your `applicationKey=....`
+
+Upon successful connection, you'll send commands and listen for responses
+
+###### Command: subscribe
+
+Listen for new data from all the devices for users' apiKeys. 
+
+command body - an object containing the property apiKeys that is an array of apiKeys:
+```
+{
+    apiKeys: 
+        [
+            'multiple',
+            'apiKeys',
+            'are fine'
+        ]
+}
+```
+
+###### Command: unsubscribe
+
+Stop listening for new data from all the devices for users' apiKeys. 
+
+command body - an object containing the property apiKeys that is an array of apiKeys:
+```
+{
+    apiKeys: 
+        [
+            'multiple',
+            'apiKeys',
+            'are fine'
+        ]
+}
+```
+
+
+##### Event: subscribed
+
+`subscribed` events are emitted after you send a `subscribe` or `unsubscribe` command. It will list all of the devices you are currently subscribed to and, if applicable, will return apiKeys that are not valid.
+
+event body - an object containing one or more properties
++ `devices` - an array containing objects for all of the devices you are currently subscribed to
++ `invalidApiKeys` - an array of apiKeys that aren't valid
+
+```
+{
+    devices: 
+        [
+            {
+                "macAddress": "00:00:00:00:00:00",
+                "info": {
+                  "name": "My Weather Station",
+                  "location": "Home"
+                },
+                "lastData": {
+                    "dateutc": 1515436500000,
+                    "date": "2018-01-08T18:35:00.000Z",
+                    "winddir": 58,
+                    "windspeedmph": 0.9,
+                    "windgustmph": 4,
+                    "maxdailygust": 5,
+                    "windgustdir": 61,
+                    "winddir_avg2m": 63,
+                    "windspdmph_avg2m": 0.9,
+                    "winddir_avg10m": 58,
+                    "windspdmph_avg10m": 0.9,
+                    "tempf": 66.9,
+                    "humidity": 30,
+                    "baromrelin": 30.05,
+                    "baromabsin": 28.71,
+                    "tempinf": 74.1,
+                    "humidityin": 30,
+                    "hourlyrainin": 0,
+                    "dailyrainin": 0,
+                    "monthlyrainin": 0,
+                    "yearlyrainin": 0,
+                    "feelsLike": 66.9,
+                    "dewPoint": 34.45380707462477
+                }
+            }
+        ]
+    invalidApiKeys: 
+        [
+            'an_api_key_that_is_not_any_good'
+        ]
+}
+```
+
+##### Event: data
+
+`data` events are emitted when a device you are subscribed to sends new data. The data contains a `macAddress` property that you can use to match against the device list supplied by the `subscribed` event
+
+event body - an object representing a device's data point
+
+```
+{
+    "macAddress": "00:00:00:00:00:00",
+    "dateutc": 1515436500000,
+    "date": "2018-01-08T18:35:00.000Z",
+    "winddir": 58,
+    "windspeedmph": 0.9,
+    "windgustmph": 4,
+    "maxdailygust": 5,
+    "windgustdir": 61,
+    "winddir_avg2m": 63,
+    "windspdmph_avg2m": 0.9,
+    "winddir_avg10m": 58,
+    "windspdmph_avg10m": 0.9,
+    "tempf": 66.9,
+    "humidity": 30,
+    "baromrelin": 30.05,
+    "baromabsin": 28.71,
+    "tempinf": 74.1,
+    "humidityin": 30,
+    "hourlyrainin": 0,
+    "dailyrainin": 0,
+    "monthlyrainin": 0,
+    "yearlyrainin": 0,
+    "feelsLike": 66.9,
+    "dewPoint": 34.45380707462477
+}
+```
