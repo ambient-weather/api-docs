@@ -134,15 +134,15 @@ You will be working with two types of keys when using the Realtime API:
 
 The realtime API uses Websockets and is based on Socket.io (https://socket.io/). The easiest way to use the API is to use a Socket.io helper library. They are available in most languages.
 
-ENDPOINT: `https://api.ambientweather.net/?api=1&applicationKey=....`
+Socket.io Endpoint: `https://api.ambientweather.net/?api=1&applicationKey=....`
 
-The key parameters are `api=1` to identify the api version and your `applicationKey=....`
+Note the query parameters `api=1` to identify the api version and `applicationKey=....` to identify your application
 
 Upon successful connection, you'll send commands and listen for responses
 
 ##### Helper Libraries
 
-+ Node.js - https://github.com/owise1/ambient-weather-apireal
++ Node.js - https://github.com/owise1/ambient-weather-api
 
 ###### Command: subscribe
 
@@ -219,7 +219,8 @@ event body - an object containing one or more properties
                     "yearlyrainin": 0,
                     "feelsLike": 66.9,
                     "dewPoint": 34.45380707462477
-                }
+                },
+                "apiKey": "the_apiKey_for_the_user_this_device_belongs_to"
             }
         ]
     invalidApiKeys: 
