@@ -138,7 +138,9 @@ Socket.io Endpoint: `https://api.ambientweather.net/?api=1&applicationKey=....`
 
 Note the query parameters `api=1` to identify the api version and `applicationKey=....` to identify your application
 
-Upon successful connection, you'll send commands and listen for responses
+Upon successful connection, you'll send commands and listen for responses. 
+
+NOTE: Our web process are turned over once a day which cause your connection to be closed. When this ahppens your application will need to reconnect and resubscribe.
 
 ##### Helper Libraries
 
