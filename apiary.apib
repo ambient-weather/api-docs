@@ -7,7 +7,7 @@ Access an Ambient Weather user's weather station data programmatically using our
 
 ##### Authentication
 
-Two API Keys are required for all REST API requests: 
+Two API Keys are required for all REST API requests:
 
 + `applicationKey` - identifies the developer / application. To request an application key please email `support@ambientweather.com`
 + `apiKey` - grants access to past/present data for a given user's devices.  A typical consumer-facing application will initially ask the user to create an `apiKey` on thier AmbientWeather.net account page (https://dashboard.ambientweather.net/account) and paste it into the app.  Developers for personal or in-house apps will also need to create an apiKey on their own account page.
@@ -22,6 +22,7 @@ API requests are capped at 1 request/second for each user's apiKey and 3 request
 + PHP (Laravel) - https://github.com/Jafo232/ambient_api
 + Go - https://github.com/lrosenman/ambient
 + Python - https://github.com/avryhof/ambient_api
++ Python (asyncio) - https://github.com/bachya/aioambient
 
 ##### Other Resources
 + API Wiki - https://github.com/ambient-weather/api-docs/wiki
@@ -80,11 +81,11 @@ Provides a list of the user's available devices along with each device's most re
   + macAddress (required) - device Mac Address
   + apiKey (required) - API Key for user account
   + applicationKey (required) - Application Key
-  + endDate (optional) - The most recent datetime. Results descend from there. If left blank, the most recent results will be returned.  Date format should be in milliseconds since the epoch or string representations outlined here: https://momentjs.com/docs/#/parsing/string/. Note: datetimes are stored in UTC. 
+  + endDate (optional) - The most recent datetime. Results descend from there. If left blank, the most recent results will be returned.  Date format should be in milliseconds since the epoch or string representations outlined here: https://momentjs.com/docs/#/parsing/string/. Note: datetimes are stored in UTC.
   + limit (optional, number) - The maximum number of results to return (max: 288)
       + Default: 288
 
-  
+
 ### Query Device Data [GET]
 
 Fetch data for a given device. Data is stored in 5 or 30 minute increments. A list of all possible fields is here: https://github.com/ambient-weather/api-docs/wiki/Device-Data-Specs
@@ -118,7 +119,7 @@ Fetch data for a given device. Data is stored in 5 or 30 minute increments. A li
                 "dewPoint": 34.45380707462477
             }
         ]
-        
+
 # Group Ambient Realtime API
 
 Access an Ambient Weather user's weather station data in realtime using our Realtime API
@@ -126,7 +127,7 @@ Access an Ambient Weather user's weather station data in realtime using our Real
 
 ##### Authentication
 
-You will be working with two types of keys when using the Realtime API: 
+You will be working with two types of keys when using the Realtime API:
 
 + `applicationKey` - identifies the developer / application. To request an application key please email `support@ambientweather.com`. This key is passed to the server when you make the initial connection
 + `apiKey` - identifies a user. This key grants read-only access to all of the devices for a given user. It is used in the `subscribe` command (see below)
@@ -139,7 +140,7 @@ Socket.io Endpoint: `https://api.ambientweather.net/?api=1&applicationKey=....`
 
 Note the query parameters `api=1` to identify the api version and `applicationKey=....` to identify your application
 
-Upon successful connection, you'll send commands and listen for responses. 
+Upon successful connection, you'll send commands and listen for responses.
 
 
 ##### Helper Libraries
@@ -156,12 +157,12 @@ Disconnect from the Realtime API
 
 ###### Command: subscribe
 
-Listen for new data from all the devices for users' apiKeys. 
+Listen for new data from all the devices for users' apiKeys.
 
 command body - an object containing the property apiKeys that is an array of apiKeys:
 ```
 {
-    apiKeys: 
+    apiKeys:
         [
             'multiple',
             'apiKeys',
@@ -172,12 +173,12 @@ command body - an object containing the property apiKeys that is an array of api
 
 ###### Command: unsubscribe
 
-Stop listening for new data from all the devices for users' apiKeys. 
+Stop listening for new data from all the devices for users' apiKeys.
 
 command body - an object containing the property apiKeys that is an array of apiKeys:
 ```
 {
-    apiKeys: 
+    apiKeys:
         [
             'multiple',
             'apiKeys',
@@ -197,7 +198,7 @@ event body - an object containing one or more properties
 
 ```
 {
-    devices: 
+    devices:
         [
             {
                 "macAddress": "00:00:00:00:00:00",
@@ -233,7 +234,7 @@ event body - an object containing one or more properties
                 "apiKey": "the_apiKey_for_the_user_this_device_belongs_to"
             }
         ]
-    invalidApiKeys: 
+    invalidApiKeys:
         [
             'an_api_key_that_is_not_any_good'
         ]
