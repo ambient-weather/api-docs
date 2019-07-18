@@ -129,14 +129,14 @@ Access an Ambient Weather user's weather station data in realtime using our Real
 
 You will be working with two types of keys when using the Realtime API:
 
-+ `applicationKey` - identifies the developer / application. To request an application key please email `support@ambientweather.com`. This key is passed to the server when you make the initial connection
++ `applicationKey` - identifies the developer / application. This key is passed to the server when you make the initial connection
 + `apiKey` - identifies a user. This key grants read-only access to all of the devices for a given user. It is used in the `subscribe` command (see below)
 
 ##### Websockets
 
 The realtime API uses Websockets and is based on Socket.io (https://socket.io/). The easiest way to use the API is to use a Socket.io helper library. They are available in most languages.
 
-Socket.io Endpoint: `https://api.ambientweather.net/?api=1&applicationKey=....`
+Socket.io Endpoint: `https://rt.ambientweather.net/?api=1&applicationKey=....`
 
 Note the query parameters `api=1` to identify the api version and `applicationKey=....` to identify your application
 
