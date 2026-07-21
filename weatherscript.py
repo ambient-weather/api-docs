@@ -27,7 +27,6 @@ weather_data = {
 
 return weather_data
 
-
 except requests.RequestException as e:
   print(f"API error: {e}")
   return None
